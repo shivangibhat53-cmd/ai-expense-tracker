@@ -1,10 +1,19 @@
 from fastapi import FastAPI
-from app.db.database import Base, engine
-from app.models.user import User
+from app.db.base import Base
+from app.core.logging import logger
+from app.api.v1.router import api_router
+from app.models import user  #important to register model
 
-Base.metadata.create_all(bind = engine)
-app = FastAPI()
+
+app = FastAPI(
+    title = "API Finance Platform",
+    version = "1.0.0"
+)
+logger.info("🚀 FastAPI application starting up...")
+logger.info("Attaching api/v1/router to the app")
+app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/")
-def home():
-    return {"message":"AI Finance Platform API"}
+def root():
+    logger.info("Root endpoint called")
+    return {"message":"Backend is running"}
