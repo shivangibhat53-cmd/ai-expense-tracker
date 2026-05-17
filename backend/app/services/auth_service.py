@@ -6,20 +6,20 @@ logger.info("***********Inside auth service.py *********")
 def create_user(db : Session, email :str, password : str):
     user = User(
         email = email,
-        hashes_password = hash_password(password)
+        hashed_password = hash_password(password)
     )
     db.add(user)
-    logger.INFO("USER ADDED")
+    logger.info("USER ADDED")
     db.commit()
-    logger.INFO("USER COMMITTED")
+    logger.info("USER COMMITTED")
     db.refresh(user)
-    logger.INFO("USER REFRESHED")
+    logger.info("USER REFRESHED")
 
     return user
 
 def authenticate_user(db:Session, email:str, password :str):
     user = db.query(User).filter(User.email == email).first()
-    logger.INFO("AUTHENTICATING USER")
+    logger.info("AUTHENTICATING USER")
     if not user:
         # Generate a dummy verification step that mimics standard bcrypt computation time.
         # This keeps server response times identical whether an email exists or not. Timimg Attack Mitigation
@@ -27,7 +27,7 @@ def authenticate_user(db:Session, email:str, password :str):
         verify_password(password, dummy_hash)
         return None
     
-    if not verify_password(password, user.hashes_password):
+    if not verify_password(password, user.hashed_password):
         return None
     
     return user
