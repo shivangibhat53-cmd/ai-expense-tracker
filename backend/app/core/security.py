@@ -18,6 +18,21 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     logger.info("Verifying the hashed password")
     return pwd_context.verify(plain_password, hashed_password)
 
+def create_email_verification_token(email : str):
+    expire = datetime.now(timezone.utc) + timedelta(hours = 24)
+
+    payload = {
+        "sub" : email,
+        "type":"email_verification",
+        "exp" : expire
+    }
+
+    return jwt.encode(
+        payload,
+        settings.SECRET_KEY,
+        algorithm = settings.ALGORITHM
+    )
+
 def create_access_token(data:dict, expires_delta:timedelta | None = None) -> str:
     logger.info("CREATING ACCESS TOKENS")
     to_encode = data.copy()
@@ -45,6 +60,22 @@ def create_refresh_token(data: dict):
 
     return jwt.encode(
         to_encode,
+        settings.SECRET_KEY,
+        algorithm = settings.ALGORITHM
+    )
+
+def create_password_reset_token(email:str):
+    
+    expire = datetime.now(timezone.utc) + timedelta(minutes = 30)
+
+    payload = {
+        "sub" : email,
+        "type":"password_reset",
+        "exp" : expire
+    }
+
+    return jwt.encode(
+        payload,
         settings.SECRET_KEY,
         algorithm = settings.ALGORITHM
     )
