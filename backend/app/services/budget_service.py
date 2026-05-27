@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from app.models.category import Category
 from app.models.transaction import Transaction
 from app.models.budget import Budget
-
+from notification_service import create_notification
 
 def create_budget(db: Session, user_id : int, data):
     
@@ -52,6 +52,12 @@ def budget_status(db: Session, user_id : int, month: int, year : int):
         spent = db.query(func.coalesce(func.sum(Transaction.amount),0)).filter(Transaction.user_id == user_id, Transaction.category_id == budget.category_id, Transaction.type == "expense",
                         func.extract("month", Transaction.created_at) == budget.month, func.extract("year", Transaction.created_at) == budget.year).scalar()
         
+        if spent >= budget.amount:
+            create_notification(db, user_id, f"Budget exceeded for category - {budget.category_id}")
+        
+        elif spent >= budget.amount * 0.9:
+            create_notification(db, user_id, f"Warning 90% budget used for category - {budget.category_id}")
+            
         remaining = budget.amount - spent
 
 

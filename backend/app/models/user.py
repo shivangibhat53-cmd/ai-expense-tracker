@@ -26,5 +26,7 @@ class User(Base):
     transactions = relationship("Transaction", back_populates = "users")
 
     budgets = relationship("Budget", back_populates= "users")
+
+    users = relationship("Notification", back_populates = "users")
     
     logger.info("Tables created")
