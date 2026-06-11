@@ -21,12 +21,12 @@ class User(Base):
 
     created_at = Column(DateTime(timezone = True), server_default = func.now())
 
-    categories = relationship("Category", back_populates = "users")
+    categories = relationship("Category", back_populates = "user")
 
-    transactions = relationship("Transaction", back_populates = "users")
+    transactions = relationship("Transaction", back_populates = "user")
 
-    budgets = relationship("Budget", back_populates= "users")
+    budgets = relationship("Budget", back_populates= "user")
 
-    users = relationship("Notification", back_populates = "users")
+    notifications = relationship("Notification", back_populates = "user")
     
     logger.info("Tables created")

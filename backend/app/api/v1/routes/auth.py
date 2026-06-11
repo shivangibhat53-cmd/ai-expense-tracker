@@ -9,6 +9,7 @@ from app.db.deps import get_db
 from app.models.user import User
 from app.api.deps import get_current_user,get_current_active_superuser
 from fastapi.security import OAuth2PasswordRequestForm
+from app.services.email_service import send_verification_email
 
 
 logger.info("**********INSIDE V1/Route/auth****************")
@@ -24,6 +25,9 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     print(user.email)
     db_user = create_user(db, user.email, user.password)
     token = create_email_verification_token(db_user.email)
+    logger.info("send_verification_email")
+    send_verification_email(db_user.email,token)
+    logger.info("After send_verification_email")
     return {"id": db_user.id, "email": db_user.email,
              "verification_token":token} # temporary (dev only)
 

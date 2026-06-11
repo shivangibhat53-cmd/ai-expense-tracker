@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from app.models.user import User
 from app.core.security import hash_password, verify_password,verify_access_token,create_access_token,create_refresh_token,create_password_reset_token
 from app.core.logging import logger
+from app.services.email_service import send_password_reset_email
 logger.info("***********Inside auth service.py *********")
 def create_user(db : Session, email :str, password : str):
     user = User(
@@ -97,7 +98,7 @@ def generate_password_reset(db:Session, email:str):
         return {"message": "If email exists, reset link sent"}
     
     token = create_password_reset_token(email)
-
+    send_password_reset_email(email,token)
     # send_email(email, token) → later
     logger.info(f"RESET TOKEN (DEV ONLY): {token}")
 

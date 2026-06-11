@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, ForeignKey
+from sqlalchemy import Column, Integer, Float, ForeignKey, Boolean
 from app.db.base import Base
 
 from sqlalchemy.orm import relationship
@@ -16,10 +16,14 @@ class Budget(Base):
 
     year = Column(Integer, nullable = False)
 
+    warning_sent = Column(Boolean, default = False)
+
+    exceeded_sent = Column(Boolean, default = False)
+
     user_id = Column(Integer, ForeignKey("users.id"))
 
     category_id = Column(Integer, ForeignKey("categories.id"))
 
-    users = relationship("User", back_populates = "budgets")
+    user = relationship("User", back_populates = "budgets")
 
-    categories = relationship("Category", back_populates = "budgets")
+    category = relationship("Category", back_populates = "budgets")

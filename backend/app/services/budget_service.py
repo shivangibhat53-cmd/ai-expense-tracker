@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from app.models.category import Category
 from app.models.transaction import Transaction
 from app.models.budget import Budget
-from notification_service import create_notification
+from app.services.notification_service import create_notification
 
 def create_budget(db: Session, user_id : int, data):
     

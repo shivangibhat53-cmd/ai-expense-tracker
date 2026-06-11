@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from app.models.transaction import Transaction
 from app.models.category import Category
 from datetime import datetime
+from app.services.notification_service import check_budget_alerts
 
 
 def create_transaction(db: Session, user_id : int, data):
@@ -23,9 +24,19 @@ def create_transaction(db: Session, user_id : int, data):
         user_id = user_id
     )
 
+
+
     db.add(transaction)
     db.commit()
     db.refresh(transaction)
+
+    print("CHECK_BUDGET_ALERTS CALLED")
+    check_budget_alerts(
+    db=db,
+    user_id= user_id,
+    category_id=transaction.category_id
+    )
+
 
     return transaction
 

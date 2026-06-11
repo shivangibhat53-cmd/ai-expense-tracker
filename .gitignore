@@ -3,4 +3,7 @@ node_modules
 dist
 build
 .DS_Store
+venv/
+__pycache__/
+*.pyc
 docker-compose.override.yml

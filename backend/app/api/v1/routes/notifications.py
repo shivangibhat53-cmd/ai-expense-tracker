@@ -9,7 +9,7 @@ from app.models.user import User
 from app.schemas.notification import (NotificationResponse)
 import app.services.notification_service as service
 
-router = APIRouter(prefix = "/notifications", tags = "Notifications")
+router = APIRouter(prefix = "/notifications", tags = ["Notifications"])
 
 @router.get("/",response_model = List[NotificationResponse])
 def get_all_notifications(db: Session = Depends(get_db), current_user : User = Depends(get_current_user)):
