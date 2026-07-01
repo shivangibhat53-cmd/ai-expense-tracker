@@ -28,5 +28,7 @@ class User(Base):
     budgets = relationship("Budget", back_populates= "user")
 
     notifications = relationship("Notification", back_populates = "user")
+
+    recurring_transactions = relationship("RecurringTransaction",back_populates="user",cascade="all, delete-orphan")
     
     logger.info("Tables created")

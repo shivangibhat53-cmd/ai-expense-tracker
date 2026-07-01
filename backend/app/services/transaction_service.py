@@ -5,7 +5,7 @@ from app.models.transaction import Transaction
 from app.models.category import Category
 from datetime import datetime
 from app.services.notification_service import check_budget_alerts
-
+from app.services.recurring_transaction import detect_recurring_transactions
 
 def create_transaction(db: Session, user_id : int, data):
     category = db.query(Category).filter(
@@ -29,6 +29,11 @@ def create_transaction(db: Session, user_id : int, data):
     db.add(transaction)
     db.commit()
     db.refresh(transaction)
+
+    detect_recurring_transactions(
+    db,
+    user_id,
+    )
 
     print("CHECK_BUDGET_ALERTS CALLED")
     check_budget_alerts(

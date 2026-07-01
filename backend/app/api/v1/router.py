@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.routes import auth,transactions,categories,budgets,notifications,analytics
+from app.api.v1.routes import auth,transactions,categories,budgets,notifications,analytics,recurring_transaction
 from app.core.logging import logger
 
 logger.info("*************INISE V1/router.py***************")
@@ -15,3 +15,4 @@ api_router.include_router(budgets.router)
 logger.info("Include notifications.router")
 api_router.include_router(notifications.router)
 api_router.include_router(analytics.router)
+api_router.include_router(recurring_transaction.router)
